@@ -7,15 +7,41 @@
 //
 
 import UIKit
+import Swinject
+import SwinjectStoryboard
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
-
+  var container: Container!
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-    // Override point for customization after application launch.
+    
+    container = Container() { container in
+      //Model
+      container.register(APIWorking.self) { _ in
+        APIWorker()
+      }
+      //ViewModel
+      container.register(NewsViewModeling.self) { r in
+        NewsViewModel(apiworker: r.resolve(APIWorking.self)!)
+      }
+      //Views
+      container.storyboardInitCompleted(UINavigationController.self) { _,_ in }
+      container.storyboardInitCompleted(ViewController.self) { r,c in
+        c.viewModel = r.resolve(NewsViewModeling.self)!
+      }
+    }
+    // Initial Screen
+    let window = UIWindow(frame: UIScreen.main.bounds)
+    window.backgroundColor = UIColor.white
+    window.makeKeyAndVisible()
+    self.window = window
+    let bundle = Bundle(for: ViewController.self)
+    let storyboard = SwinjectStoryboard.create(name: "Main", bundle: bundle, container: container)
+    window.rootViewController = storyboard.instantiateInitialViewController()
+    
     return true
   }
 
