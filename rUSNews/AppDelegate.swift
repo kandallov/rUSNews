@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       }
       //Views
       container.storyboardInitCompleted(UINavigationController.self) { _,_ in }
-      container.storyboardInitCompleted(ViewController.self) { r,c in
+      container.storyboardInitCompleted(NewsViewController.self) { r,c in
         c.viewModel = r.resolve(NewsViewModeling.self)!
       }
     }
@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window.backgroundColor = UIColor.white
     window.makeKeyAndVisible()
     self.window = window
-    let bundle = Bundle(for: ViewController.self)
+    let bundle = Bundle(for: NewsViewController.self)
     let storyboard = SwinjectStoryboard.create(name: "Main", bundle: bundle, container: container)
     window.rootViewController = storyboard.instantiateInitialViewController()
     
