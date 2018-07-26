@@ -11,6 +11,7 @@ import RxSwift
 protocol APIWorking {
   func getNews(selectionIndex: Int) -> Observable<News>
   func buildRequest(countryIndex: String) -> Observable<Data>
+  func photoGet(url: String) -> Observable<UIImage>
 }
 
 final class APIWorker: APIWorking {
@@ -45,6 +46,14 @@ final class APIWorker: APIWorking {
     request.httpMethod = "GET"
     
     return URLSession.shared.rx.data(request: request).map { $0 }
+  }
+  
+  func photoGet(url: String) -> Observable<UIImage> {
+    let urlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+    let urlForRequest = URL(string: urlString)!
+    let requesrt = URLRequest(url: urlForRequest)
+    
+    return URLSession.shared.rx.data(request: requesrt).map { UIImage(data: $0) ?? UIImage() }
   }
   
   private func getCountryId(selectedIndex: Int) -> String {
