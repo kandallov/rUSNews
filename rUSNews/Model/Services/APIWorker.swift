@@ -16,7 +16,7 @@ protocol APIWorking {
 
 final class APIWorker: APIWorking {
   
-  private let apiKey = "acdf109f02b54e84b7345254f4c910c7"
+  private let apiKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" //you can get it free on - https://newsapi.org/register
   
   func getNews(selectionIndex: Int) -> Observable<News> {
     let countryIndex = getCountryId(selectedIndex: selectionIndex)
